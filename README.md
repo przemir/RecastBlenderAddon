@@ -17,9 +17,5 @@ Compiling from source
 
 About plugin
 
-Blender 2.8 dropped BGE, including recast navmesh generation.
-This plugin consists of two elements:
-1) C/C++ shared library:
-Recast & Detour is C++ library. Navmesh generation algorithm was taken from blender 2.79b.
-2) Python addon:
-It uses ctypes to communicate with C.
+Blender 2.8 dropped BGE, including recast navmesh generation. This plugin adds possibility to create navigation mesh using Recast and detour library once again.
+Some files from blender 2.79b were forked and modified to build shared library. Python addon communicate with this shared library using ctypes module.
