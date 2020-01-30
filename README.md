@@ -5,7 +5,10 @@ Panel in: Scene -> Recast navmesh
 
 Installation
 
-Plugin and shared library for windows ("RecastBlenderAddon.dll") are in "blender_addon" folder.
+Blender addon is in file "RecastBlenderAddon.py".
+Shared library for windows ("RecastBlenderAddon.dll") is in "bin" folder.
+There is also "RecastBlenderAddonTestApp.exe" which may show missing dependencies (like msvc redistributables). Those missing files needs to be in the same directory as dll and test application.
+
 Select "Edit -> Preferences" and choose "Add-ons" tab. Click "Install from file..." and choose downloaded file.
 You also have to set path to shared library in plugin property "Path of the shared library:".
 Note that shared library has to be 64bit if you are using 64bit blender.

@@ -21,7 +21,7 @@
  */
 
 #include <stdio.h>
-#include <iostream>
+#include <string.h>
 #include "recast-capi.h"
 #include "mesh_navmesh.h"
 
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     int reportsMaxChars = 128;
     char msg[128];
-    strcpy(msg, "");
+    strncpy(msg, "", reportsMaxChars);
 
     int nverts = 12;
     const int ntris = 14;

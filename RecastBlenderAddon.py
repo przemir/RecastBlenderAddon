@@ -21,13 +21,13 @@ bl_info = {
     "name":         "RecastBlenderAddon",
     "author":       "Przemysław Bągard",
     "blender":      (2,80,0),
-    "version":      (0,0,1),
+    "version":      (0,1,0),
     "location":     "Scene",
     "description":  "Recast blender navmesh generator.",
     "category":     "Navmesh"
 }
 
-import os, sys, logging
+import os, sys, logging, traceback
 import bpy, mathutils, subprocess, pickle
 from bpy_extras.io_utils import ExportHelper
 
@@ -259,6 +259,9 @@ class ReacastNavmeshGenerateOperator(bpy.types.Operator):
         addon_prefs = addon_preferences(context)
         dllpath = os.path.abspath(addon_prefs.dllpath)
         dllpathr = dllpath.replace("\\", "/")
+        if not os.path.exists(dllpathr):
+            self.report({'ERROR'}, 'File not exists: %s\n' % dllpathr)
+            return{'FINISHED'}
         
         verts, tris = extractTriangulatedInputMesh()
         vertsCount = len(verts)
@@ -267,13 +270,18 @@ class ReacastNavmeshGenerateOperator(bpy.types.Operator):
         ntris = (int)(len(tris)/3)
         recastData = recastDataFromBlender(bpy.context.scene)
         
-        print("Path to shared library: %s" % dllpathr)
+        prevWorkingDir = os.getcwd()
+        nextWorkingDir = os.path.dirname(dllpathr)
+        os.chdir(nextWorkingDir)
         try:
             l = ctypes.CDLL(dllpathr)
         except OSError as e:
-            self.report({'ERROR'}, 'Failed to load shared library: %s\nPath to shared library: %s' % (str(e), dllpathr))
+            tracebackStr = traceback.format_exc()
+            self.report({'ERROR'}, 'Failed to load shared library: %s\nPath to shared library: %s\n\nTraceback: %s' % (str(e), dllpathr, tracebackStr))
+            os.chdir(prevWorkingDir)
             return{'FINISHED'}
         
+        os.chdir(prevWorkingDir)
         print("nverts %i" % nverts)
         print("ntris %i" % ntris)
         print("cell size %f" % recastData.cellsize)
